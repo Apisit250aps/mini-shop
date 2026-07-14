@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+build
+coverage
+*.log
+package-lock.json
+bun.lock
+bun.lockb
+.agents
+
