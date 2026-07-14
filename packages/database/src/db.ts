@@ -6,6 +6,4 @@ if (!url) {
   throw new Error('DATABASE_URL environment variable is not set');
 }
 
-const db = drizzle(url);
-
-export default db;
+export default drizzle(url);
