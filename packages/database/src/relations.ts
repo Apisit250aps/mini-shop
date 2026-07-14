@@ -1,27 +1,21 @@
-import { defineRelations, defineRelationsPart } from "drizzle-orm";
+import { defineRelationsPart } from "drizzle-orm";
 import * as schema from "./schema";
 
-export const relations = defineRelationsPart(schema, (r) => ({
-  user: {
-    accounts: r.one.user({
-      from: r.user.id,
-      to: r.account.userId,
-    }),
-    sessions: r.one.user({
-      from: r.user.id,
-      to: r.session.userId,
+export const authRelations = defineRelationsPart(schema, (r) => ({
+  account: {
+    user: r.one.user({
+      from: r.account.userId,
+      to: r.user.id
     }),
   },
-  account: {
-    user: r.one.account({
-      from: r.account.userId,
-      to: r.user.id,
-    }),
+  user: {
+    accounts: r.many.account(),
+    sessions: r.many.session(),
   },
   session: {
-    user: r.one.session({
+    user: r.one.user({
       from: r.session.userId,
-      to: r.user.id,
+      to: r.user.id
     }),
-  }
+  },
 }));
