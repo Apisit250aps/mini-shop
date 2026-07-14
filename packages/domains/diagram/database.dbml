@@ -1,0 +1,254 @@
+enum StockMovementType {
+  in
+  out
+  transfer
+  adjust
+  return
+}
+
+enum PaymentMethod {
+  cash
+  qr
+  card
+  transfer
+}
+
+Table User {
+  id int [pk, increment]
+  name string
+  email string [unique]
+  emailVerified datetime [null]
+  image string [null]
+  isActive boolean [default: true]
+}
+
+Table Account {
+  id int [pk, increment]
+  userId int [ref: > User.id]
+
+  provider string
+  providerAccountId string
+
+  refresh_token string [null]
+  access_token string [null]
+  expires_at int [null]
+  token_type string [null]
+  scope string [null]
+  id_token string [null]
+  session_state string [null]
+}
+
+Table Company {
+  id int [pk, increment]
+  name string
+  description string
+  ownerId int [ref: > User.id]
+
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table Branch {
+  id int [pk, increment]
+  companyId int [ref: > Company.id]
+
+  name string
+  address string
+}
+
+Table Department {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  name string
+}
+
+Table UserBranch {
+  userId int [ref: > User.id]
+  branchId int [ref: > Branch.id]
+}
+
+Table UserDepartment {
+  userId int [ref: > User.id]
+  departmentId int [ref: > Department.id]
+}
+
+Table Role {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  name string
+  description string
+}
+
+Table Permission {
+  id int [pk, increment]
+
+  module string
+  action string
+}
+
+Table RolePermission {
+  roleId int [ref: > Role.id]
+  permissionId int [ref: > Permission.id]
+}
+
+Table UserRole {
+  userId int [ref: > User.id]
+  roleId int [ref: > Role.id]
+}
+
+Table Category {
+  id int [pk, increment]
+  companyId int [ref: > Company.id]
+
+  name string
+}
+
+Table Brand {
+  id int [pk, increment]
+  companyId int [ref: > Company.id]
+
+  name string
+}
+
+Table Unit {
+  id int [pk, increment]
+  companyId int [ref: > Company.id]
+
+  name string
+}
+
+Table Product {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  categoryId int [ref: > Category.id]
+  brandId int [ref: > Brand.id]
+  unitId int [ref: > Unit.id]
+
+  sku string
+  barcode string
+
+  name string
+
+  costPrice decimal
+  salePrice decimal
+}
+
+Table Warehouse {
+  id int [pk, increment]
+
+  branchId int [ref: > Branch.id]
+
+  name string
+}
+
+Table Inventory {
+  warehouseId int [ref: > Warehouse.id]
+  productId int [ref: > Product.id]
+
+  quantity decimal
+}
+
+Table Supplier {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  name string
+  phone string
+  taxId string
+}
+
+Table Customer {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  name string
+  phone string
+  email string
+}
+
+Table PurchaseOrder {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  supplierId int [ref: > Supplier.id]
+  branchId int [ref: > Branch.id]
+
+  createdBy int [ref: > User.id]
+
+  status string
+}
+
+Table PurchaseItem {
+  id int [pk, increment]
+
+  purchaseId int [ref: > PurchaseOrder.id]
+  productId int [ref: > Product.id]
+
+  qty decimal
+  price decimal
+}
+
+Table SaleOrder {
+  id int [pk, increment]
+
+  companyId int [ref: > Company.id]
+
+  customerId int [ref: > Customer.id]
+  branchId int [ref: > Branch.id]
+
+  cashierId int [ref: > User.id]
+
+  status string
+}
+
+Table SaleItem {
+  id int [pk, increment]
+
+  saleId int [ref: > SaleOrder.id]
+  productId int [ref: > Product.id]
+
+  qty decimal
+  price decimal
+  discount decimal
+}
+
+Table Payment {
+  id int [pk, increment]
+
+  saleId int [ref: > SaleOrder.id]
+
+  amount decimal
+
+  method PaymentMethod
+
+  paidAt datetime
+}
+
+Table StockMovement {
+  id int [pk, increment]
+
+  warehouseId int [ref: > Warehouse.id]
+  productId int [ref: > Product.id]
+
+  referenceType string
+  referenceId int
+
+  type StockMovementType
+
+  qty decimal
+  beforeQty decimal
+  afterQty decimal
+
+  createdBy int [ref: > User.id]
+
+  createdAt datetime
+}
