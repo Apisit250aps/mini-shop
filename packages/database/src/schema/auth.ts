@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, boolean, index, uuid } from "drizzle-orm/pg-core";
-import { primaryKeyUuid7 } from "../lib/utils";
+import { primaryKeyUuid7, updatedAtTimestamp, createdAtTimestamp } from "../lib/utils";
 
 export const user = pgTable("user", {
   id: primaryKeyUuid7("id"),
@@ -13,11 +13,8 @@ export const user = pgTable("user", {
   isActive: boolean("is_active").default(true).notNull(),
   // Timestamps
   lastLogin: timestamp("last_login"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
+  createdAt: createdAtTimestamp("created_at"),
+  updatedAt: updatedAtTimestamp("updated_at"),
 }, (table) => [index("user_email_idx").on(table.email)]);
 
 export const session = pgTable(
@@ -26,10 +23,8 @@ export const session = pgTable(
     id: primaryKeyUuid7("id"),
     expiresAt: timestamp("expires_at").notNull(),
     token: text("token").notNull().unique(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+    createdAt: createdAtTimestamp("created_at"),
+    updatedAt: updatedAtTimestamp("updated_at"),
     ipAddress: text("ip_address"),
     userAgent: text("user_agent"),
     userId: uuid("user_id")
@@ -55,10 +50,8 @@ export const account = pgTable(
     refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
     scope: text("scope"),
     password: text("password"),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+    createdAt: createdAtTimestamp("created_at"),
+    updatedAt: updatedAtTimestamp("updated_at"),
   },
   (table) => [index("account_userId_idx").on(table.userId)],
 );
@@ -70,11 +63,8 @@ export const verification = pgTable(
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: timestamp("expires_at").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+    createdAt: createdAtTimestamp("created_at"),
+    updatedAt: updatedAtTimestamp("updated_at"),
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
