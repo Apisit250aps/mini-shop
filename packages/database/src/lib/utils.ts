@@ -14,7 +14,5 @@ export function updatedAtTimestamp<T extends string>(columnName: T) {
 }
 
 export function createdAtTimestamp<T extends string>(columnName: T) {
-  return timestamp(columnName)
-    .defaultNow()
-    .notNull();
+  return timestamp(columnName).defaultNow().notNull();
 }

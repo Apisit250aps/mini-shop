@@ -1,4 +1,4 @@
-import type { UserEntity } from "../schema/user";
+import type { UserEntity } from '../schema/user';
 
 class User implements UserEntity {
   id: string;

@@ -1,5 +1,11 @@
-import { z } from "zod";
-import { BaseEntity, BooleanField, DateField, EmailField, StringField } from "../lib/entity";
+import { z } from 'zod';
+import {
+  BaseEntity,
+  BooleanField,
+  DateField,
+  EmailField,
+  StringField,
+} from '../lib/entity';
 
 const userSchema = BaseEntity({
   name: StringField({
@@ -38,10 +44,6 @@ type UserEntity = z.infer<typeof userSchema>;
 type CreateUserEntity = z.infer<typeof createUserSchema>;
 type UpdateUserEntity = z.infer<typeof updateUserSchema>;
 
-export {
-  userSchema,
-  createUserSchema,
-  updateUserSchema,
-};
+export { userSchema, createUserSchema, updateUserSchema };
 
 export type { UserEntity, CreateUserEntity, UpdateUserEntity };

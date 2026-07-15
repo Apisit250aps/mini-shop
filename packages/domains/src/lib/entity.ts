@@ -13,11 +13,11 @@ type FieldResult<
   TNullable extends boolean,
 > = TNullable extends true
   ? TRequired extends false
-  ? z.ZodNullable<z.ZodOptional<TSchema>>
-  : z.ZodNullable<TSchema>
+    ? z.ZodNullable<z.ZodOptional<TSchema>>
+    : z.ZodNullable<TSchema>
   : TRequired extends false
-  ? z.ZodOptional<TSchema>
-  : TSchema;
+    ? z.ZodOptional<TSchema>
+    : TSchema;
 
 type StringFieldOptions = BaseFieldOptions<string>;
 type EmailFieldOptions = BaseFieldOptions<string>;

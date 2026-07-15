@@ -1,70 +1,85 @@
-import { pgTable, text, timestamp, boolean, index, uuid } from "drizzle-orm/pg-core";
-import { primaryKeyUuid7, updatedAtTimestamp, createdAtTimestamp } from "../lib/utils";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  uuid,
+} from 'drizzle-orm/pg-core';
+import {
+  primaryKeyUuid7,
+  updatedAtTimestamp,
+  createdAtTimestamp,
+} from '../lib/utils';
 
-export const user = pgTable("user", {
-  id: primaryKeyUuid7("id"),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
-  image: text("image"),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  // 
-  isActive: boolean("is_active").default(true).notNull(),
-  // Timestamps
-  lastLogin: timestamp("last_login"),
-  createdAt: createdAtTimestamp("created_at"),
-  updatedAt: updatedAtTimestamp("updated_at"),
-}, (table) => [index("user_email_idx").on(table.email)]);
+export const user = pgTable(
+  'user',
+  {
+    id: primaryKeyUuid7('id'),
+    name: text('name').notNull(),
+    email: text('email').notNull().unique(),
+    emailVerified: boolean('email_verified').default(false).notNull(),
+    image: text('image'),
+    firstName: text('first_name'),
+    lastName: text('last_name'),
+    //
+    isActive: boolean('is_active').default(true).notNull(),
+    // Timestamps
+    lastLogin: timestamp('last_login'),
+    createdAt: createdAtTimestamp('created_at'),
+    updatedAt: updatedAtTimestamp('updated_at'),
+  },
+  (table) => [index('user_email_idx').on(table.email)],
+);
 
 export const session = pgTable(
-  "session",
+  'session',
   {
-    id: primaryKeyUuid7("id"),
-    expiresAt: timestamp("expires_at").notNull(),
-    token: text("token").notNull().unique(),
-    createdAt: createdAtTimestamp("created_at"),
-    updatedAt: updatedAtTimestamp("updated_at"),
-    ipAddress: text("ip_address"),
-    userAgent: text("user_agent"),
-    userId: uuid("user_id")
+    id: primaryKeyUuid7('id'),
+    expiresAt: timestamp('expires_at').notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: createdAtTimestamp('created_at'),
+    updatedAt: updatedAtTimestamp('updated_at'),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    userId: uuid('user_id')
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: 'cascade' }),
   },
-  (table) => [index("session_userId_idx").on(table.userId)],
+  (table) => [index('session_userId_idx').on(table.userId)],
 );
 
 export const account = pgTable(
-  "account",
+  'account',
   {
-    id: primaryKeyUuid7("id"),
-    accountId: text("account_id").notNull(),
-    providerId: text("provider_id").notNull(),
-    userId: uuid("user_id")
+    id: primaryKeyUuid7('id'),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: uuid('user_id')
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    accessToken: text("access_token"),
-    refreshToken: text("refresh_token"),
-    idToken: text("id_token"),
-    accessTokenExpiresAt: timestamp("access_token_expires_at"),
-    refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-    scope: text("scope"),
-    password: text("password"),
-    createdAt: createdAtTimestamp("created_at"),
-    updatedAt: updatedAtTimestamp("updated_at"),
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: createdAtTimestamp('created_at'),
+    updatedAt: updatedAtTimestamp('updated_at'),
   },
-  (table) => [index("account_userId_idx").on(table.userId)],
+  (table) => [index('account_userId_idx').on(table.userId)],
 );
 
 export const verification = pgTable(
-  "verification",
+  'verification',
   {
-    id: primaryKeyUuid7("id"),
-    identifier: text("identifier").notNull(),
-    value: text("value").notNull(),
-    expiresAt: timestamp("expires_at").notNull(),
-    createdAt: createdAtTimestamp("created_at"),
-    updatedAt: updatedAtTimestamp("updated_at"),
+    id: primaryKeyUuid7('id'),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt: createdAtTimestamp('created_at'),
+    updatedAt: updatedAtTimestamp('updated_at'),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)],
+  (table) => [index('verification_identifier_idx').on(table.identifier)],
 );

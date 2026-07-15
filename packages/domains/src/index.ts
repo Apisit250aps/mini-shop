@@ -1,4 +1,3 @@
-
 export abstract class BaseUseCase<Context, TOutput> {
   abstract execute(context: Context): Promise<TOutput>;
 }
