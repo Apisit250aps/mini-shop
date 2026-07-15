@@ -13,7 +13,7 @@
     "prettier": "^3.7.4",
     "turbo": "^2.10.5",
     "typescript": "7.0.2",
-    "@types/node": "^20.6.4"
+    "@types/node": "^22.15.3"
   },
   "engines": {
     "node": ">=18"
@@ -27,5 +27,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "overrides": {
+    "typescript": "7.0.2"
+  }
 }
