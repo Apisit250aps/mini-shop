@@ -1,10 +1,10 @@
-import { z } from 'zod';
+import { core, util, z } from 'zod';
 import { v7 as uuidv7 } from 'uuid';
 
 type BaseFieldOptions<T> = {
   required?: boolean;
   nullable?: boolean;
-  default?: T | (() => T);
+  default?: util.NoUndefined<core.output<T>> | (() => T);
 };
 
 type FieldResult<
@@ -13,11 +13,11 @@ type FieldResult<
   TNullable extends boolean,
 > = TNullable extends true
   ? TRequired extends false
-    ? z.ZodNullable<z.ZodOptional<TSchema>>
-    : z.ZodNullable<TSchema>
+  ? z.ZodNullable<z.ZodOptional<TSchema>>
+  : z.ZodNullable<TSchema>
   : TRequired extends false
-    ? z.ZodOptional<TSchema>
-    : TSchema;
+  ? z.ZodOptional<TSchema>
+  : TSchema;
 
 type StringFieldOptions = BaseFieldOptions<string>;
 type EmailFieldOptions = BaseFieldOptions<string>;
@@ -50,7 +50,7 @@ const createField = <
   }
 
   if (options.default !== undefined) {
-    result = result.default(options.default);
+    result = result.default(options.default).unwrap();
   }
 
   return result as FieldResult<TSchema, TRequired, TNullable>;
@@ -142,11 +142,10 @@ const BooleanField = <
 
 const BaseEntity = <T extends z.ZodRawShape>(schema: T) => {
   return z.object({
-    id: UUIDField(),
+    id: UUIDField({ default: () => uuidv7() }),
     ...schema,
     createdAt: TimestampField(),
     updatedAt: TimestampField(),
-    deletedAt: DateField({ nullable: true }),
   });
 };
 
