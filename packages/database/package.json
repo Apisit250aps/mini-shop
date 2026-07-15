@@ -15,7 +15,8 @@
   "type": "commonjs",
   "dependencies": {
     "drizzle-orm": "^1.0.0-rc.4",
-    "pg": "^8.22.0"
+    "pg": "^8.22.0",
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
